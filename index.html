@@ -6,6 +6,18 @@
     <title>JsTPS</title>
     <script src="Demo.js"></script>
     <script src="JsTPS.js"></script>
+    <style>
+      table,
+      th,
+      td {
+        border: 1px solid black;
+        padding: 1em;
+      }
+
+      td {
+        vertical-align: top;
+      }
+    </style>
   </head>
   <body>
     <table>
@@ -23,14 +35,16 @@
             let num = new Num();
 
             document.getElementById("testAdd").innerHTML =
-              "" + (num.getNum() === 0) + "<br/>";
+              "num.getNum() === 0: " +
+              (num.getNum() === 0) +
+              "<br/> <strong>tps.addTransaction 5<strong> <br/>";
             tps.addTransaction(new AddToNum_Transaction(num, 5));
             document.getElementById("testAdd").innerHTML +=
-              "" +
+              "num.getNum() === 5: " +
               (num.getNum() === 5) +
-              "<br/>" +
+              "<br/> tps.getSize() === 1: " +
               (tps.getSize() === 1) +
-              "<br/>" +
+              "<br/> tps.getRedoSize() === 0: " +
               (tps.getRedoSize() === 0) +
               "<br/>" +
               (tps.getUndoSize() === 1) +
@@ -144,6 +158,254 @@
               "<br/>";
 
             tps.undoTransaction();
+            document.getElementById("testUndo").innerHTML +=
+              "" +
+              (tps.hasTransactionToUndo() === true) +
+              "<br/>" +
+              (tps.hasTransactionToRedo() === true) +
+              "<br/>" +
+              (num.getNum() === 5) +
+              "<br/>" +
+              (tps.getSize() === 3) +
+              "<br/>" +
+              (tps.getRedoSize() === 2) +
+              "<br/>" +
+              (tps.getUndoSize() === 1) +
+              "<br/>";
+
+            tps.undoTransaction();
+            document.getElementById("testUndo").innerHTML +=
+              "" +
+              (tps.hasTransactionToUndo() === false) +
+              "<br/>" +
+              (tps.hasTransactionToRedo() === true) +
+              "<br/>" +
+              (num.getNum() === 0) +
+              "<br/>" +
+              (tps.getSize() === 3) +
+              "<br/>" +
+              (tps.getRedoSize() === 3) +
+              "<br/>" +
+              (tps.getUndoSize() === 0) +
+              "<br/>";
+
+            tps.undoTransaction();
+            document.getElementById("testUndo").innerHTML +=
+              "" +
+              (tps.hasTransactionToUndo() === false) +
+              "<br/>" +
+              (tps.hasTransactionToRedo() === true) +
+              "<br/>" +
+              (num.getNum() === 0) +
+              "<br/>" +
+              (tps.getSize() === 3) +
+              "<br/>" +
+              (tps.getRedoSize() === 3) +
+              "<br/>" +
+              (tps.getUndoSize() === 0) +
+              "<br/>";
+          </script>
+        </td>
+        <td id="testRedo">
+          <script>
+            tps = new JsTPS();
+            num = new Num();
+
+            document.getElementById("testRedo").innerHTML =
+              "" + (num.getNum() === 0) + "<br/>";
+
+            tps.addTransaction(new AddToNum_Transaction(num, 5));
+            tps.addTransaction(new AddToNum_Transaction(num, 10));
+            tps.addTransaction(new AddToNum_Transaction(num, 20));
+
+            document.getElementById("testRedo").innerHTML +=
+              "" +
+              (tps.hasTransactionToUndo() === true) +
+              "<br/>" +
+              (tps.hasTransactionToRedo() === false) +
+              "<br/>" +
+              (num.getNum() === 35) +
+              "<br/>" +
+              (tps.getSize() === 3) +
+              "<br/>" +
+              (tps.getRedoSize() === 0) +
+              "<br/>" +
+              (tps.getUndoSize() === 3) +
+              "<br/>";
+
+            tps.undoTransaction();
+            tps.doTransaction();
+            document.getElementById("testRedo").innerHTML +=
+              "" +
+              (tps.hasTransactionToUndo() === true) +
+              "<br/>" +
+              (tps.hasTransactionToRedo() === false) +
+              "<br/>" +
+              (num.getNum() === 35) +
+              "<br/>" +
+              (tps.getSize() === 3) +
+              "<br/>" +
+              (tps.getRedoSize() === 0) +
+              "<br/>" +
+              (tps.getUndoSize() === 3) +
+              "<br/>";
+
+            tps.undoTransaction();
+            tps.undoTransaction();
+            tps.doTransaction();
+            tps.doTransaction();
+            document.getElementById("testRedo").innerHTML +=
+              "" +
+              (tps.hasTransactionToUndo() === true) +
+              "<br/>" +
+              (tps.hasTransactionToRedo() === false) +
+              "<br/>" +
+              (num.getNum() === 35) +
+              "<br/>" +
+              (tps.getSize() === 3) +
+              "<br/>" +
+              (tps.getRedoSize() === 0) +
+              "<br/>" +
+              (tps.getUndoSize() === 3) +
+              "<br/>";
+
+            tps.undoTransaction();
+            tps.undoTransaction();
+            tps.undoTransaction();
+            tps.doTransaction();
+            tps.doTransaction();
+            tps.doTransaction();
+            document.getElementById("testRedo").innerHTML +=
+              "" +
+              (tps.hasTransactionToUndo() === true) +
+              "<br/>" +
+              (tps.hasTransactionToRedo() === false) +
+              "<br/>" +
+              (num.getNum() === 35) +
+              "<br/>" +
+              (tps.getSize() === 3) +
+              "<br/>" +
+              (tps.getRedoSize() === 0) +
+              "<br/>" +
+              (tps.getUndoSize() === 3) +
+              "<br/>";
+
+            tps.undoTransaction();
+            tps.undoTransaction();
+            tps.undoTransaction();
+            tps.doTransaction();
+            tps.doTransaction();
+            document.getElementById("testRedo").innerHTML +=
+              "" +
+              (tps.hasTransactionToUndo() === true) +
+              "<br/>" +
+              (tps.hasTransactionToRedo() === true) +
+              "<br/>" +
+              (num.getNum() === 15) +
+              "<br/>" +
+              (tps.getSize() === 3) +
+              "<br/>" +
+              (tps.getRedoSize() === 1) +
+              "<br/>" +
+              (tps.getUndoSize() === 2) +
+              "<br/>";
+
+            tps.undoTransaction();
+            tps.undoTransaction();
+            tps.undoTransaction();
+            tps.doTransaction();
+            tps.doTransaction();
+            tps.doTransaction();
+            tps.doTransaction();
+            document.getElementById("testRedo").innerHTML +=
+              "" +
+              (tps.hasTransactionToUndo() === true) +
+              "<br/>" +
+              (tps.hasTransactionToRedo() === false) +
+              "<br/>" +
+              (num.getNum() === 35) +
+              "<br/>" +
+              (tps.getSize() === 3) +
+              "<br/>" +
+              (tps.getRedoSize() === 0) +
+              "<br/>" +
+              (tps.getUndoSize() === 3) +
+              "<br/>";
+          </script>
+        </td>
+        <td id="testClear">
+          <script>
+            tps = new JsTPS();
+            num = new Num();
+
+            document.getElementById("testClear").innerHTML =
+              "" + (num.getNum() === 0) + "<br/>";
+
+            tps.addTransaction(new AddToNum_Transaction(num, 5));
+            tps.addTransaction(new AddToNum_Transaction(num, 10));
+            tps.addTransaction(new AddToNum_Transaction(num, 20));
+            document.getElementById("testClear").innerHTML +=
+              "" +
+              (num.getNum() === 35) +
+              "<br/>" +
+              (tps.getSize() === 3) +
+              "<br/>" +
+              (tps.getRedoSize() === 0) +
+              "<br/>" +
+              (tps.getUndoSize() === 3) +
+              "<br/>";
+
+            tps.clearAllTransactions();
+            document.getElementById("testClear").innerHTML +=
+              "" +
+              (num.getNum() === 35) +
+              "<br/>" +
+              (tps.getSize() === 0) +
+              "<br/>" +
+              (tps.getRedoSize() === 0) +
+              "<br/>" +
+              (tps.getUndoSize() === 0) +
+              "<br/>";
+
+            tps.addTransaction(new AddToNum_Transaction(num, 5));
+            tps.addTransaction(new AddToNum_Transaction(num, 10));
+            tps.addTransaction(new AddToNum_Transaction(num, 20));
+            document.getElementById("testClear").innerHTML +=
+              "" +
+              (num.getNum() === 70) +
+              "<br/>" +
+              (tps.getSize() === 3) +
+              "<br/>" +
+              (tps.getRedoSize() === 0) +
+              "<br/>" +
+              (tps.getUndoSize() === 3) +
+              "<br/>";
+
+            tps.clearAllTransactions();
+            document.getElementById("testClear").innerHTML +=
+              "" +
+              (num.getNum() === 70) +
+              "<br/>" +
+              (tps.getSize() === 0) +
+              "<br/>" +
+              (tps.getRedoSize() === 0) +
+              "<br/>" +
+              (tps.getUndoSize() === 0) +
+              "<br/>";
+
+            tps.addTransaction(new AddToNum_Transaction(num, 5));
+            tps.addTransaction(new AddToNum_Transaction(num, 10));
+            tps.addTransaction(new AddToNum_Transaction(num, 20));
+            document.getElementById("testClear").innerHTML +=
+              "" +
+              (num.getNum() === 105) +
+              "<br/>" +
+              (tps.getSize() === 3) +
+              "<br/>" +
+              (tps.getRedoSize() === 0) +
+              "<br/>" +
+              (tps.getUndoSize() === 3) +
+              "<br/>";
           </script>
         </td>
       </tr>

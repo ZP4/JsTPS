@@ -1,4 +1,4 @@
-class JsTPS {
+export class JsTPS {
   constructor() {
     this.transactionArray = [];
     this.mostRecentTransaction = -1;
@@ -55,7 +55,7 @@ class JsTPS {
     if (this.hasTransactionToRedo()) {
       this.performingDo = true;
       singleTransaction = this.transactionArray[this.mostRecentTransaction + 1];
-      singleTransaction.doTransaction();
+      //singleTransaction.doTransaction();
       this.mostRecentTransaction++;
       this.performingDo = false;
     }
@@ -82,7 +82,7 @@ class JsTPS {
 
   peekUndo() {
     if (this.hasTransactionToUndo()) {
-      return this.transactionArray[mostRecentTransaction];
+      return this.transactionArray[this.mostRecentTransaction];
     } else {
       return null;
     }
@@ -90,9 +90,22 @@ class JsTPS {
 
   peekDo() {
     if (this.hasTransactionToRedo()) {
-      return this.transactionArray[mostRecentTransaction + 1];
+      return this.transactionArray[this.mostRecentTransaction + 1];
     } else {
       return null;
     }
   }
+
+  toString() {
+    let text =
+      "--Number of Transactions: " + this.transactionArray.length + "\n";
+    text += "--Current Index on Stack: " + this.mostRecentTransaction + "\n";
+    text += "--Current Transaction Stack:\n";
+    for (let i = 0; i <= this.mostRecentTransaction; i++) {
+      let jx = this.transactionArray[i];
+      text += "----" + jx.toString() + "\n";
+    }
+  }
 }
+
+export default JsTPS;
