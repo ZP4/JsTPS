@@ -1,4 +1,4 @@
-export class JsTPS {
+class JsTPS {
   constructor() {
     this.transactionArray = [];
     this.mostRecentTransaction = -1;
@@ -55,7 +55,7 @@ export class JsTPS {
     if (this.hasTransactionToRedo()) {
       this.performingDo = true;
       singleTransaction = this.transactionArray[this.mostRecentTransaction + 1];
-      //singleTransaction.doTransaction();
+      singleTransaction.doTransaction();
       this.mostRecentTransaction++;
       this.performingDo = false;
     }
@@ -98,14 +98,18 @@ export class JsTPS {
 
   toString() {
     let text =
-      "--Number of Transactions: " + this.transactionArray.length + "\n";
-    text += "--Current Index on Stack: " + this.mostRecentTransaction + "\n";
-    text += "--Current Transaction Stack:\n";
+      "\n<strong>--Number of Transactions:</strong> " +
+      this.transactionArray.length +
+      "\n\n<br/>";
+    text +=
+      "<strong>--Current Index on Stack:</strong> " +
+      this.mostRecentTransaction +
+      "\n<br/>";
+    text += "<strong>--Current Transaction Stack:</strong>\n<br/>";
     for (let i = 0; i <= this.mostRecentTransaction; i++) {
       let jx = this.transactionArray[i];
-      text += "----" + jx.toString() + "\n";
+      text += "  -" + jx.toString() + "-  \n";
     }
+    return text;
   }
 }
-
-export default JsTPS;
